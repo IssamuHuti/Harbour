@@ -161,3 +161,5 @@ SubStr()
 * estrutura 
     SubStr(<string>, <posicao inical da qual vai comecar>, <numero de caracteres que vai ser extraido>)
 * a SubStr funciona sem a opção da quantidade de caracteres a ser extraido
+
+

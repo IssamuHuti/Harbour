@@ -90,6 +90,8 @@ do while .t.
                 endif
 
                 cCadastroInfo += str(nCadastro) + DToC(dCadastro) // 18, data(ultimas 8)
+                @ 05,01 say SubStr(cCadastroInfo, 10, 1)
+                @ 06,01 say SubStr(cCadastroInfo, 11, 8)
 
                 Inkey(0)
 

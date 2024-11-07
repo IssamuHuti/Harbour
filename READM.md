@@ -162,4 +162,13 @@ SubStr()
     SubStr(<string>, <posicao inical da qual vai comecar>, <numero de caracteres que vai ser extraido>)
 * a SubStr funciona sem a opção da quantidade de caracteres a ser extraido
 
-
+message
+* configuração: set message to <linha da chamada do message>
+* prompt permite navegar entre opções
+* set wrap on = permite retornar na primeira opcao assim que chegar no ultimo
+* exemplo:
+    nOpcao := 0
+    @ 01,01 prompt 'Cadastrar ' message 'Cadastra Senhas'
+    @ 02,01 prompt 'Consultar ' message 'Consulta Senhas'
+    @ 03,01 prompt 'Sair      ' message 'Sai do programa'
+    menu to nOpcao

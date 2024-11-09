@@ -23,15 +23,13 @@ do while cConfirmacao != AllTrim(cADescobrir)
     @ 05,19 get cLetra  picture '@!'    valid !Empty(cLetra)
     read
 
-    if cLetra !$ cTestada
-        cTestada += cLetra
-    endif
-
-    if cLetra $ cADescobrir
-        
-    else
-        cRejeitada += cLetra
-    endif
+    count := 1
+    do while count <= Len(cADescobrir)
+        if cLetra == SubStr(cADescobrir, count, 1)
+            cConfirmacao += cLetra 
+        else
+            cRejeitada += cLetra
+        endif
 
     
 

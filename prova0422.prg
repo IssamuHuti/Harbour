@@ -21,6 +21,7 @@ nCodigo         := 0
 cCadastroInfo   := ''
 
 do while .t.
+    clear 
     // @ 01,01 say '1- Cadastrar'
     // @ 02,01 say '2- Cadastrar'
     // @ 03,01 say '3- Cadastrar'
@@ -151,31 +152,31 @@ do while .t.
         nDiaCadastro    := Day(dCadastrado)
         cMes            := ''
 
-        // if nMesCadastro == 1
-        //     cMes := 'Janeiro'
-        // elseif nMesCadastro == 2
-        //     cMes := 'Fevereiro'
-        // elseif nMesCadastro == 3
-        //     cMes := 'Marco'
-        // elseif nMesCadastro == 4
-        //     cMes := 'Abril'
-        // elseif nMesCadastro == 5
-        //     cMes := 'Maio'
-        // elseif nMesCadastro == 6
-        //     cMes := 'Junho'
-        // elseif nMesCadastro == 7
-        //     cMes := 'Julho'
-        // elseif nMesCadastro == 8
-        //     cMes := 'Agosto'
-        // elseif nMesCadastro == 9
-        //     cMes := 'Setembro'
-        // elseif nMesCadastro == 10
-        //     cMes := 'Outubro'
-        // elseif nMesCadastro == 11
-        //     cMes := 'Novembro'
-        // elseif nMesCadastro == 12
-        //     cMes := 'Dezembro'
-        // endif
+        if nMesCadastro == 1
+            cMes := 'Janeiro'
+        elseif nMesCadastro == 2
+            cMes := 'Fevereiro'
+        elseif nMesCadastro == 3
+            cMes := 'Marco'
+        elseif nMesCadastro == 4
+            cMes := 'Abril'
+        elseif nMesCadastro == 5
+            cMes := 'Maio'
+        elseif nMesCadastro == 6
+            cMes := 'Junho'
+        elseif nMesCadastro == 7
+            cMes := 'Julho'
+        elseif nMesCadastro == 8
+            cMes := 'Agosto'
+        elseif nMesCadastro == 9
+            cMes := 'Setembro'
+        elseif nMesCadastro == 10
+            cMes := 'Outubro'
+        elseif nMesCadastro == 11
+            cMes := 'Novembro'
+        elseif nMesCadastro == 12
+            cMes := 'Dezembro'
+        endif
 
         cPrimeiroDiaMes     := '01/' + AllTrim(Str(nMesCadastro)) + '/' + AllTrim(Str(nAnoCadastro))
         dPrimeiroDiaMes     := CToD(cPrimeiroDiaMes)
@@ -189,9 +190,10 @@ do while .t.
             dUltimoDiaMes  := CToD(cPrimeiroDia) - 1
         endif
 
-        @ 04,04 say 'D  S  T  Q  Q  S  S'
+        @ 04,06 say cMes + ' / ' + Str(nAnoCadastro)
+        @ 05,04 say 'D  S  T  Q  Q  S  S'
 
-        nLinha       := 5
+        nLinha       := 6
         nColuna      := nDiaPrimeiroMes * 3
         nDia         := 1
         do while nDia <= Day(dUltimoDiaMes)

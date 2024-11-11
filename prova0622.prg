@@ -47,6 +47,7 @@ do while .t.
     endif 
 
     if nOpcaoJogo == 2
+        clear
 
         if Len(AllTrim(cPalavraChave)) == 0
             Alert('Nao contem nenhuma palavra para descobrir')
@@ -71,7 +72,7 @@ do while .t.
             nChances := 4
         endif 
 
-        do while Len(cPalavraOculta) <= Len(AllTrim(cPalavraChave))
+        do while Len(cPalavraOculta) < Len(AllTrim(cPalavraChave))
             cPalavraOculta += '*'
         enddo
         
@@ -85,30 +86,33 @@ do while .t.
             endif
 
             if nChances == 6
-                @ 05,20 say 'O'
-                @ 06,19 say '\|/'
-                @ 07,20 say '|'
-                @ 08,19 say '/ \'
-                @ 09,19 say 'o o'
+                @ 03,20 say 'O'
+                @ 04,19 say '\|/'
+                @ 05,20 say '|'
+                @ 06,19 say '/ \'
+                @ 07,19 say 'o o'
             elseif nChances == 5
-                @ 05,20 say 'O'
-                @ 06,19 say '\|/'
-                @ 07,20 say '|'
-                @ 08,19 say '/ \'
+                @ 03,20 say 'O'
+                @ 04,19 say '\|/'
+                @ 05,20 say '|'
+                @ 06,19 say '/ \'
             elseif nChances == 4
-                @ 05,20 say 'O'
-                @ 06,19 say '\|/'
-                @ 07,20 say '|'
+                @ 03,20 say 'O'
+                @ 04,19 say '\|/'
+                @ 05,20 say '|'
             elseif nChances == 3
-                @ 05,20 say 'O'
-                @ 06,19 say '\|/'
+                @ 03,20 say 'O'
+                @ 04,19 say '\|/'
             elseif nChances == 2
-                @ 05,20 say 'O'
-                @ 06,20 say '|'
+                @ 03,20 say 'O'
+                @ 04,20 say '|'
             elseif nChances == 1
-                @ 05,20 say 'O'
+                @ 03,20 say 'O'
             else
-                @ 05,20 say 'DIE' color 'r/'
+                @ 03,18 say '_'
+                @ 04,19 say '/ \'
+                @ 05,18 say '|DIE|' color 'r/'
+                @ 06,18 say '|___|'
             endif            
 
             @ 01,01 say 'Digite uma letra:'
@@ -120,21 +124,23 @@ do while .t.
 
             cTentadas += cLetra + '/'
             
+            @ 09,01 say cTentadas
+            if !(cLetra $ cPalavraChave)
+                nChances--
+            endif
+
             nCount := 1
             cPalavraOculta := ''
             do while nCount <= Len(AllTrim(cPalavraChave))
                 if SubStr(AllTrim(cPalavraChave), nCount, 1) == cLetra
                     cPalavraOculta += cLetra
+                elseif SubStr(AllTrim(cPalavraChave), nCount, 1) $ cTentadas
+                    cPalavraOculta += SubStr(AllTrim(cPalavraChave), nCount, 1)
                 else 
                     cPalavraOculta +='*'
                 endif 
                 nCount++
             enddo
-
-            @ 09,01 say cTentadas
-            if !(cLetra $ cPalavraChave)
-                nChances--
-            endif
 
             nValicao  := 1
             nValidada := 0
@@ -158,8 +164,8 @@ do while .t.
 
     nOpcaoParar := Alert('Jogo encerrado, jogar novamente:', {'Sim', 'Nao'})
     if nOpcaoParar == 1
-        exit
-    else 
         loop
+    else 
+        exit
     endif
 enddo

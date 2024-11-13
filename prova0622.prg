@@ -85,34 +85,32 @@ do while .t.
                 @ 07,01 say cDica1
             endif
 
-            if nChances == 6
+            if nChances == 5
                 @ 03,20 say 'O'
-                @ 04,19 say '\|/'
-                @ 05,20 say '|'
-                @ 06,19 say '/ \'
-                @ 07,19 say 'o o'
-            elseif nChances == 5
-                @ 03,20 say 'O'
-                @ 04,19 say '\|/'
-                @ 05,20 say '|'
-                @ 06,19 say '/ \'
             elseif nChances == 4
                 @ 03,20 say 'O'
-                @ 04,19 say '\|/'
+                @ 04,20 say '|'
                 @ 05,20 say '|'
             elseif nChances == 3
                 @ 03,20 say 'O'
-                @ 04,19 say '\|/'
+                @ 04,20 say '|'
+                @ 05,19 say '/|\'
             elseif nChances == 2
                 @ 03,20 say 'O'
                 @ 04,20 say '|'
+                @ 05,19 say '/|\'
+                @ 06,19 say '/ \'
             elseif nChances == 1
                 @ 03,20 say 'O'
+                @ 04,20 say '|'
+                @ 05,19 say '/|\'
+                @ 06,19 say '/ \'
+                @ 07,19 say 'o o'
             else
-                @ 03,18 say '_'
-                @ 04,19 say '/ \'
+                @ 03,18 say '_'     color 'r/'
+                @ 04,19 say '/ \'   color 'r/'
                 @ 05,18 say '|DIE|' color 'r/'
-                @ 06,18 say '|___|'
+                @ 06,18 say '|___|' color 'r/'
             endif            
 
             @ 01,01 say 'Digite uma letra:'

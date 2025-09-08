@@ -42,7 +42,6 @@ data
     - nMes          := Month(dExemplo)
     - nDia          := Day(dExemplo)
     - nDiaSemana    := DoW(dExemplo) (1 - domingo, 2 - segunda, ... 7 - sabado)
-
 * não tem picture
 * tem valid
 * configuração antes do clear:
@@ -62,6 +61,7 @@ valid
     - @ 03,01 get nPreco       picture '@e 999.99 valid nPreco >= 0
     - @ 04,01 get nTemperatura picture '999.99'   valid nTemperatura >= -10 .and. nTemperatura <= 50 // o valor negativo conta como caracter
       read
+* !Empty(variavel) valida se o variável está vazio ou não
 
 margens
 * @ 00,00 to 20,50 -> cria uma margem 
@@ -74,7 +74,6 @@ parada
     - se informar 0 pausa o programa ate digitar qualquer tecla
     - se informar qualquer dígito acima do 0 será um temporizador em segundos
 
-!Empty(variavel) valida se o variável está vazio ou não
 
 if/elseif/else/endif
 * if     // inicia condicional
@@ -127,7 +126,7 @@ do while
 
 LastKey()
 * ultima tecla pressionada pelo usuário
-* informar sempre após informar um read
+* informar sempre após informar um read, é possível de utilizar ela quando recebe a tecla pelo Inkey(0)
 * padrão usada no SG, 'ESC'
     LastKey() == 27
 * usada bastante para finalizar um loop

@@ -8,7 +8,7 @@ SetMode (25,80)
 clear
 
 cInstituicaoEstudo  := 'Instituto SG'
-cRuaInstituicao     := 'Rua Parana, 1556'
+cRuaInstituicao     := 'Parana, 1556'
 cCidadeInstituicao  := 'Maringa'
 cEstadoInstituicao  := 'Parana'
 cTelefone           := '(44) 3213-4573'
@@ -45,6 +45,7 @@ nFaltaBi31          := 0
 nFaltaBi32          := 0
 nFaltaBi33          := 0
 nFaltaBi34          := 0
+nPercentualDesconto := 20 / 100
 lAprovadoDisc1      := .t.
 lAprovadoDisc2      := .t.
 lAprovadoDisc3      := .t.
@@ -56,23 +57,20 @@ cCorAprovado1       := 'g/'
 cCorAprovado2       := 'g/'
 cCorAprovado3       := 'g/'
 nDependencias       := 0
+cColunas            := Replicate('-', 73)
 
 @ 00,00 to 24,74
-@ 01,01 say 'Instituicao:'          picture '@!'
-@ 01,13 say cInstituicaoEstudo      picture '@!'
-@ 02,01 say 'Rua:'                  picture '@!'
-@ 02,05 say cRuaInstituicao         picture '@!'
-@ 03,01 say 'Cidade:'               picture '@!'
-@ 03,08 say cCidadeInstituicao      picture '@!'
-@ 03,20 say 'Estado:'               picture '@!'
-@ 03,28 say cEstadoInstituicao
-@ 04,01 say Replicate('-', 73)
-@ 05,01 say 'Aluno:'                picture '@!'
-@ 06,01 say 'Data de nascimento:'   picture '@!'
-@ 07,01 say 'Serie:'                picture '@!'
-@ 07,10 say 'Periodo:'              picture '@!'
-@ 08,01 say 'Mensalidade:'          picture '@!'
-@ 09,01 say Replicate('-', 73)
+@ 01,01 say 'Instituicao: ' + AllTrim(cInstituicaoEstudo) picture '@!'
+@ 02,01 say 'Rua: ' + AllTrim(cRuaInstituicao)            picture '@!'
+@ 03,01 say 'Cidade: ' + AllTrim(cCidadeInstituicao)      picture '@!'
+@ 03,20 say 'Estado: ' + AllTrim(cEstadoInstituicao)      picture '@!'
+@ 04,01 say cColunas
+@ 05,01 say 'Aluno:'                                      picture '@!'
+@ 06,01 say 'Data de nascimento:'                         picture '@!'
+@ 07,01 say 'Serie:'                                      picture '@!'
+@ 07,10 say 'Periodo:'                                    picture '@!'
+@ 08,01 say 'Mensalidade:'                                picture '@!'
+@ 09,01 say cColunas
 
 @ 05,08 get cNomeAluno              picture '@!'            valid !Empty(cNomeAluno)
 @ 06,20 get dNascimentoAluno                                valid !Empty(dNascimentoAluno)
@@ -86,8 +84,9 @@ read
 @ 12,01 say '            |    |     |    |     |    |     |    |     |       |        '   picture '@!'
 @ 13,01 say '            |    |     |    |     |    |     |    |     |       |        '   picture '@!'
 @ 14,01 say '            |    |     |    |     |    |     |    |     |       |        '   picture '@!'
-@ 15,01 say Replicate('-', 73)
+@ 15,01 say cColunas
 
+//Disciplina 1
 @ 12,02 get cDisciplina1    picture '@!'    valid !Empty(cDisciplina1)
 @ 12,15 get nNotaBi11       picture '999'   valid nNotaBi11 >= 0 .and. nNotaBi11 <= 100
 @ 12,20 get nFaltaBi11      picture '99'    valid nFaltaBi11 >= 0 .and. nFaltaBi11 <= 60
@@ -103,30 +102,28 @@ nNotaMedia1 := (nNotaBi11 + nNotaBi12 + nNotaBi13 + nNotaBi14) / 4
 
 if (nSerieAluno <= 4 .and. nNotaMedia1 < 60) .or. (nSerieAluno >= 5 .and. nNotaMedia1 < 70)
    cCorAprovado1   := 'r/'
-   lAprovadoDisc1 :=.f.
+   lAprovadoDisc1 := .f.
 endif
-
-@ 12,60 say nNotaMedia1     picture '99'    color cCorAprovado1
-
 if nSerieAluno <= 3
    if nFaltaBi11 > 6 .or. nFaltaBi12 > 6 .or. nFaltaBi13 > 6 .or. nFaltaBi14 > 6
-      lAprovadoDisc1 :=.f.
+      lAprovadoDisc1 := .f.
    endif
 else 
    if nFaltaBi11 > 8 .or. nFaltaBi12 > 8 .or. nFaltaBi13 > 8 .or. nFaltaBi14 > 8
-      lAprovadoDisc1 :=.f.
+      lAprovadoDisc1 := .f.
    endif
 endif
-
-if lAprovadoDisc1 == .t.
+if lAprovadoDisc1
    cAprovadoDiscp1 := '-'
 else
    cAprovadoDiscp1 := 'DP'
    nDependencias++
 endif
 
-@ 12,67 say cAprovadoDiscp1
+@ 12,60 say nNotaMedia1     picture '99'    color cCorAprovado1
+@ 12,67 say cAprovadoDiscp1 picture '@!'
 
+//Disciplina 2
 @ 13,02 get cDisciplina2    picture '@!'    valid !Empty(cDisciplina2)
 @ 13,15 get nNotaBi21       picture '999'   valid nNotaBi21 >= 0 .and. nNotaBi21 <= 100
 @ 13,20 get nFaltaBi21      picture '99'    valid nFaltaBi21 >= 0 .and. nFaltaBi21 <= 60
@@ -142,30 +139,29 @@ nNotaMedia2 := (nNotaBi21 + nNotaBi22 + nNotaBi23 + nNotaBi24) / 4
 
 if (nSerieAluno <= 4 .and. nNotaMedia2 < 60) .or. (nSerieAluno >= 5 .and. nNotaMedia2 < 70)
    cCorAprovado2   := 'r/'
-   lAprovadoDisc2  :=.f.
+   lAprovadoDisc2  := .f.
 endif
-
-@ 13,60 say nNotaMedia2     picture '99'    color cCorAprovado2
-
 if nSerieAluno <= 3
    if nFaltaBi21 > 6 .or. nFaltaBi22 > 6 .or. nFaltaBi23 > 6 .or. nFaltaBi24 > 6
-      lAprovadoDisc2 :=.f.
+      lAprovadoDisc2 := .f.
    endif
 else 
    if nFaltaBi21 > 8 .or. nFaltaBi22 > 8 .or. nFaltaBi23 > 8 .or. nFaltaBi24 > 8
-      lAprovadoDisc2 :=.f.
+      lAprovadoDisc2 := .f.
    endif
 endif
-
-if lAprovadoDisc2 == .t.
+if lAprovadoDisc2
    cAprovadoDiscp2 := '-'
 else
    cAprovadoDiscp2 := 'DP'
    nDependencias++
 endif
 
-@ 13,67 say cAprovadoDiscp2
+@ 13,60 say nNotaMedia2     picture '99'    color cCorAprovado2
+@ 13,67 say cAprovadoDiscp2 picture '@!' 
 
+
+//Disciplina 3
 @ 14,02 get cDisciplina3    picture '@!'    valid !Empty(cDisciplina3)
 @ 14,15 get nNotaBi31       picture '999'   valid nNotaBi31 >= 0 .and. nNotaBi31 <= 100
 @ 14,20 get nFaltaBi31      picture '99'    valid nFaltaBi31 >= 0 .and. nFaltaBi31 <= 60
@@ -181,66 +177,53 @@ nNotaMedia3 := (nNotaBi31 + nNotaBi32 + nNotaBi33 + nNotaBi34) / 4
 
 if (nSerieAluno <= 4 .and. nNotaMedia3 < 60) .or. (nSerieAluno >= 5 .and. nNotaMedia3 < 70)
    cCorAprovado3   := 'r/'
-   lAprovadoDisc3 :=.f.
+   lAprovadoDisc3 := .f.
 endif
-
-@ 14,60 say nNotaMedia3     picture '99'    color cCorAprovado3
-
 if nSerieAluno <= 3
    if nFaltaBi31 > 6 .or. nFaltaBi32 > 6 .or. nFaltaBi33 > 6 .or. nFaltaBi34 > 6
-      lAprovadoDisc3 :=.f.
+      lAprovadoDisc3 := .f.
    endif
 else 
    if nFaltaBi31 > 8 .or. nFaltaBi32 > 8 .or. nFaltaBi33 > 8 .or. nFaltaBi34 > 8
-      lAprovadoDisc3 :=.f.
+      lAprovadoDisc3 := .f.
    endif
 endif
-
-if lAprovadoDisc3 == .t.
+if lAprovadoDisc3
    cAprovadoDiscp3 := '-'
 else
    cAprovadoDiscp3 := 'DP'
    nDependencias++
 endif
 
-@ 14,67 say cAprovadoDiscp3
-
-@ 15,01 say Replicate('-', 73)
+@ 14,60 say nNotaMedia3     picture '99'    color cCorAprovado3
+@ 14,67 say cAprovadoDiscp3 picture '@!'
+@ 15,01 say cColunas
 
 Inkey(0)
 clear
 
 @ 00,00 to 24,74
 @ 01,01 to 03,10
-@ 01,50 say 'Data da entrega boletim'  picture '@!'
+@ 01,50 say 'Data da entrega boletim'                       picture '@!'
 @ 02,57 say dDataBoletim
-@ 02,04 say 'logo'                     picture '@!'
-@ 01,12 say 'Instituicao:'             picture '@!'
-@ 01,24 say cInstituicaoEstudo         picture '@!'
-@ 02,12 say 'Rua:'                     picture '@!'
-@ 02,17 say cRuaInstituicao            picture '@!'
-@ 03,12 say 'Cidade:'                  picture '@!'
-@ 03,21 say cCidadeInstituicao         picture '@!'
-@ 03,32 say 'Estado:'                  picture '@!'
-@ 03,40 say cEstadoInstituicao
-@ 04,01 say Replicate('-', 73)
-@ 05,01 say 'Aluno:'                   picture '@!'
-@ 05,08 say cNomeAluno                 picture '@!'          
-@ 06,01 say 'Data de nascimento:'      picture '@!'
-@ 06,20 say dNascimentoAluno                              
-@ 07,01 say 'Serie:'                   picture '@!'
-@ 07,07 say nSerieAluno                picture '9'           
-@ 07,10 say 'Periodo:'                 picture '@!'
-@ 07,20 say cPeriodo                   picture '@!'          
-@ 08,01 say 'Mensalidade:'             picture '@!'
-@ 08,14 say nMensalidadeAluno          picture '@E 99,999.99'
-@ 09,01 say Replicate('-', 73)
+@ 02,04 say 'logo'                                          picture '@!'
+@ 01,12 say 'Instituicao: ' + cInstituicaoEstudo            picture '@!'
+@ 02,12 say 'Rua: ' + cRuaInstituicao                       picture '@!'
+@ 03,12 say 'Cidade: ' + cCidadeInstituicao                 picture '@!'
+@ 03,32 say 'Estado: ' + cEstadoInstituicao                 picture '@!'
+@ 04,01 say cColunas
+@ 05,01 say 'Aluno: ' + AllTrim(cNomeAluno)                 picture '@!'
+@ 06,01 say 'Data de nascimento: ' + DToC(dNascimentoAluno) picture '@!'
+@ 07,01 say 'Serie: ' + Str(nSerieAluno)                    picture '@!'
+@ 07,10 say 'Periodo: ' + cPeriodo                          picture '@!'
+@ 08,01 say 'Mensalidade: ' + Str(nMensalidadeAluno)        picture '@!'
+@ 09,01 say cColunas
 @ 10,01 say '            |1 Bimestre|2 Bimestre|3 Bimestre|4 Bimestre| media |aprovado'   picture '@!'
 @ 11,01 say ' disciplina |nota|falta|nota|falta|nota|falta|nota|falta| nota  |        '   picture '@!'
 @ 12,01 say '            |    |     |    |     |    |     |    |     |       |        '   picture '@!'
 @ 13,01 say '            |    |     |    |     |    |     |    |     |       |        '   picture '@!'
 @ 14,01 say '            |    |     |    |     |    |     |    |     |       |        '   picture '@!'
-@ 15,01 say Replicate('-', 73)
+@ 15,01 say cColunas
 @ 12,02 say cDisciplina1    picture '@!' 
 @ 12,15 say nNotaBi11       picture '999'
 @ 12,20 say nFaltaBi11      picture '99' 
@@ -251,7 +234,7 @@ clear
 @ 12,48 say nNotaBi14       picture '999'
 @ 12,53 say nFaltaBi14      picture '99' 
 @ 12,60 say nNotaMedia1     picture '99'    color cCorAprovado1
-@ 12,67 say cAprovadoDiscp1
+@ 12,67 say cAprovadoDiscp1 picture '@!' 
 @ 13,02 say cDisciplina2    picture '@!' 
 @ 13,15 say nNotaBi21       picture '999'
 @ 13,20 say nFaltaBi21      picture '99' 
@@ -262,7 +245,7 @@ clear
 @ 13,48 say nNotaBi24       picture '999'
 @ 13,53 say nFaltaBi24      picture '99' 
 @ 13,60 say nNotaMedia2     picture '99'    color cCorAprovado2
-@ 13,67 say cAprovadoDiscp2
+@ 13,67 say cAprovadoDiscp2 picture '@!' 
 @ 14,02 say cDisciplina3    picture '@!' 
 @ 14,15 say nNotaBi31       picture '999'
 @ 14,20 say nFaltaBi31      picture '99' 
@@ -273,8 +256,8 @@ clear
 @ 14,48 say nNotaBi34       picture '999'
 @ 14,53 say nFaltaBi34      picture '99' 
 @ 14,60 say nNotaMedia3     picture '99'    color cCorAprovado3
-@ 14,67 say cAprovadoDiscp3
-@ 15,01 say Replicate('-', 73)
+@ 14,67 say cAprovadoDiscp3 picture '@!' 
+@ 15,01 say cColunas
 
 if nDependencias <= 2
    cConfirmacao := 'Aprovado'
@@ -282,7 +265,7 @@ else
    cConfirmacao := 'Reprovado'
 endif
 
-nAcrescMensalidade := (nDependencias * 20 / 100) * nMensalidadeAluno
+nAcrescMensalidade := nDependencias * nPercentualDesconto * nMensalidadeAluno
 nNovaMensalidade   := nMensalidadeAluno + nAcrescMensalidade
 
 @ 16,01 say 'Aprovado/Reprovado    :'
@@ -292,19 +275,18 @@ nNovaMensalidade   := nMensalidadeAluno + nAcrescMensalidade
 @ 18,01 say 'Materias com dependencia'
 
 nLinhaDp := 19
-if lAprovadoDisc1 == .f.
+if !lAprovadoDisc1
    @ nLinhaDp,03 say cDisciplina1
    nLinhaDp++
 endif
-if lAprovadoDisc2 == .f.
+if !lAprovadoDisc2
    @ nLinhaDp,03 say cDisciplina2
    nLinhaDp++
 endif
-if lAprovadoDisc3 == .f.
+if !lAprovadoDisc3
    @ nLinhaDp,03 say cDisciplina3
    nLinhaDp++
 endif
 
 nLinhaDp++
-@ nLinhaDp,01 say 'Nova mensalidade para o proximo ano: R$'
-@ nLinhaDp,41 say nNovaMensalidade  picture '@E 99,999.99'
+@ nLinhaDp,01 say 'Nova mensalidade para o proximo ano: R$ ' + Str(nNovaMensalidade)

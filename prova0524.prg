@@ -12,8 +12,8 @@ clear
 cNomeFrutaria    := 'Frutas do lucas'
 cLoginCadastrado := 'LUCAS'
 cSenhaCadastrado := 'ABC12345'
-lValidacaoLogin  := .f.
-lValidacaoSenha  := .f.
+cLoginAdmin      := 'ADMIN'
+cSenhaAdmin      := 'ADMIN123'
 nCodigo1         := 5500
 nCodigo2         := 7744
 nCodigo3         := 4445
@@ -41,11 +41,11 @@ cCorNegativo     := 'r/'
 cCorLimite       := 'g/'
 nOpcaoPrograma   := 0
 
-@ 00,00 to 25,75 double 
+@ 00,00 to 25,76 double 
 @ 00,30 say cNomeFrutaria   picture '@!'
 
 do while .t.
-    do while !lValidacaoLogin .and. !lValidacaoSenha
+    do while .t.
         cLogin      := Space(10)
         cSenha      := Space(10)
         nOpcaoMenu  := 0
@@ -67,23 +67,20 @@ do while .t.
             endif 
         endif 
 
-        if AllTrim(cLogin) == cLoginCadastrado
-            lValidacaoLogin := .t.
-        endif 
-        if AllTrim(cSenha) == cSenhaCadastrado
-            lValidacaoSenha  := .t.
+        if AllTrim(cLogin) == cLoginCadastrado .and. AllTrim(cSenha) == cSenhaCadastrado
+            exit
         endif 
 
-        if !lValidacaoSenha
+        if !(AllTrim(cSenha) == cSenhaCadastrado)
             cAlerta += 'Senha '
         endif 
-        if !lValidacaoLogin
+        if !(AllTrim(cLogin) == cLoginCadastrado)
             cAlerta += 'Login '
         endif 
         
-        if !lValidacaoLogin .and. !lValidacaoSenha
+        if !(AllTrim(cSenha) == cSenhaCadastrado) .or. !(AllTrim(cLogin) == cLoginCadastrado)
             Alert(cAlerta + 'incorretas, tente novamente!')
-            @ 01,01 clear to 24,74
+            @ 01,01 clear to 24,75
         endif 
     enddo
 
@@ -92,7 +89,7 @@ do while .t.
     endif 
     
     Alert('Bem Vindo ' + cLogin)
-    @ 01,01 clear to 24,74
+    @ 01,01 clear to 24,75
 
     do while .t. 
         
@@ -100,7 +97,7 @@ do while .t.
         @ 11,30 prompt 'Sair'               message 'Sair'
         menu to nOpcaoMenu
 
-        @ 01,01 clear to 24,74
+        @ 01,01 clear to 24,75
 
         if nOpcaoMenu == 1
             nPedido++
@@ -108,7 +105,7 @@ do while .t.
             cCliente := Space(20)
             dDataPedido := dDataAtual
 
-            @ 01,01 to 04,74
+            @ 01,01 to 04,75
             @ 02,02 say 'Numero pedido:'
             @ 02,17 say AllTrim(Str(nPedido))
             @ 02,40 say 'Cliente:'
@@ -129,48 +126,54 @@ do while .t.
             endif 
             
             nContLinha := 14
-            @ 05,01 to 11,74
+            @ 05,01 to 11,75
             @ 05,30 say 'Tabela produtos' picture '@!'
-            nLimiteAtualizada := nLimite
-            nValorProdutoTotal := 0
+            nLimiteAtualizada   := nLimite
+            nValorProdutoTotal  := 0
+            nComissao           := 0
+            nDesconto           := 0
 
-            do while nLimite >= nValorProdutoTotal
+            @ 06,02 say 'Codigo | descricao do produto | preco unit. | % max. desconto | estoque'   picture '@!'
+            @ 07,02 say '       |                      |             |                 |        '
+            @ 08,02 say '       |                      |             |                 |        '
+            @ 09,02 say '       |                      |             |                 |        '
+            @ 10,02 say '       |                      |             |                 |        '
+            @ 07,03 say AllTrim(Str(nCodigo1))
+            @ 08,03 say AllTrim(Str(nCodigo2))
+            @ 09,03 say AllTrim(Str(nCodigo3))
+            @ 10,03 say AllTrim(Str(nCodigo4))
+            @ 07,11 say cDescricao1
+            @ 08,11 say cDescricao2
+            @ 09,11 say cDescricao3
+            @ 10,11 say cDescricao4
+            @ 07,34 say nPrecoUnit1 picture '@E 99.99'
+            @ 08,34 say nPrecoUnit2 picture '@E 99.99' 
+            @ 09,34 say nPrecoUnit3 picture '@E 99.99'
+            @ 10,34 say nPrecoUnit4 picture '@E 99.99'
+            @ 07,53 say nDescMax1   picture '99%'
+            @ 08,53 say nDescMax2   picture '99%'
+            @ 09,53 say nDescMax3   picture '99%'
+            @ 10,53 say nDescMax4   picture '99%'
+
+            cLoginLiberacao := Space(10)
+            cSenhaLiberacao := Space(10)
+            do while .t.
                 nCodigo            := 0
                 cDescricaoProduto  := ''
                 nPrecoProduto      := 0
                 nDescontoProduto   := 0
                 nQtdProduto        := 0
+                nComissaoProduto   := 0
                 
-                @ 06,02 say 'Codigo | descricao do produto | preco unit. | % max. desconto | estoque'   picture '@!'
-                @ 07,02 say '       |                      |             |                 |        '
-                @ 08,02 say '       |                      |             |                 |        '
-                @ 09,02 say '       |                      |             |                 |        '
-                @ 10,02 say '       |                      |             |                 |        '
-                @ 07,03 say AllTrim(Str(nCodigo1))
-                @ 08,03 say AllTrim(Str(nCodigo2))
-                @ 09,03 say AllTrim(Str(nCodigo3))
-                @ 10,03 say AllTrim(Str(nCodigo4))
-                @ 07,11 say cDescricao1
-                @ 08,11 say cDescricao2
-                @ 09,11 say cDescricao3
-                @ 10,11 say cDescricao4
-                @ 07,34 say nPrecoUnit1 picture '@E 99.99'
-                @ 08,34 say nPrecoUnit2 picture '@E 99.99' 
-                @ 09,34 say nPrecoUnit3 picture '@E 99.99'
-                @ 10,34 say nPrecoUnit4 picture '@E 99.99'
-                @ 07,53 say nDescMax1   picture '99%'
-                @ 08,53 say nDescMax2   picture '99%'
-                @ 09,53 say nDescMax3   picture '99%'
-                @ 10,53 say nDescMax4   picture '99%'
                 @ 07,66 say nEstoque1   picture '@E 999.99'
                 @ 08,66 say nEstoque2   picture '@E 999.99'
                 @ 09,66 say nEstoque3   picture '@E 999.99'
                 @ 10,66 say nEstoque4   picture '@E 999.99'
                 
-                @ 12,01 to 24,74
+                @ 12,01 to 24,75
                 @ 12,30 say 'Pedido'        picture '@!'
-                @ 13,02 say 'Codigo |   descricao   | unit | desc % |  Qtd  | Valor Total'   picture '@!'
-                @ 22,02 say Replicate('-', 60)
+                @ 13,02 say 'Codigo |   descricao   | unit | desc % |  Qtd  | %Comissao | Valor Total'   picture '@!'
+                @ 22,02 say Replicate('-', 73)
                 
                 @ nContLinha,03 get nCodigo     picture '9999'  valid !Empty(nCodigo)
                 read 
@@ -183,7 +186,7 @@ do while .t.
                     endif 
                 endif 
                 
-                if !(AllTrim(Str(nCodigo)) $ nTodososCodigos)
+                if !(nCodigo == nCodigo1) .and. !(nCodigo == nCodigo2) .and. !(nCodigo == nCodigo3) .and. !(nCodigo == nCodigo4)
                     alert('Codigo nao cadastrado')
                     loop  
                 endif 
@@ -228,7 +231,7 @@ do while .t.
                             loop
                         endif 
                     endif 
-
+                    
                     if nDescontoSolicitado > nDescontoProduto
                         Alert('Desconto para esse produto deve ser menor que ' + nDescontoProduto)
                         loop
@@ -236,7 +239,7 @@ do while .t.
                         exit 
                     endif 
                 enddo
-
+                
                 do while .t.
                     @ nContLinha,43 get nQtdSolicitado      picture '@E 999.99' valid !Empty(nQtdSolicitado)
                     read 
@@ -248,7 +251,7 @@ do while .t.
                             loop
                         endif 
                     endif 
-
+                    
                     if nQtdSolicitado > nQtdProduto
                         Alert('Quantidade solicitado maior do que quantidade em estoque!')
                         loop 
@@ -256,11 +259,29 @@ do while .t.
                         exit 
                     endif 
                 enddo
+
+                nDescontoValor := nPrecoProduto * nQtdSolicitado * (nDescontoSolicitado / 100)
+                nValorProduto := nPrecoProduto * nQtdSolicitado - nDescontoValor
+                nDesconto += nDescontoValor
                 
-                nValorProduto      := nPrecoProduto * nQtdSolicitado - (nPrecoProduto * nQtdSolicitado * (nDescontoSolicitado / 100))
+                @ nContLinha,51 get nComissaoProduto     picture '@E 999.99'  valid nComissaoProduto >= 0
+                read 
+                if LastKey() == 27
+                    nOpcao := Alert('Parar o cadastro do produto?', {'Sim', 'Nao'})
+                    if nOpcao == 1
+                        nDesconto -= nDescontoValor
+                        exit 
+                    else 
+                        loop
+                    endif 
+                endif 
+
+                nComissaoValor := nComissaoProduto * nValorProduto / 100
+                nComissao += nComissaoValor
+                nValorProduto += nComissaoValor
                 nValorProdutoTotal += nValorProduto
                 
-                @ nContLinha,51 say nValorProduto  picture '@E 99,999.99'
+                @ nContLinha,65 say nValorProduto  picture '@E 99,999.99'
                 
                 nLimiteAtualizada -= nValorProduto
                 if nCodigo == nCodigo1
@@ -274,17 +295,37 @@ do while .t.
                 endif 
 
                 if nLimite < nValorProdutoTotal
-                    nLimite += nValorProduto
-                    nValorProdutoTotal -= nValorProduto
-                    nOpcaoCancelar := Alert('Ultrapassou o limite, solicite novamente ou saia do programa', {'Solicitar', 'Sair'})
-                    if nOpcaoCancelar == 1
+                    Alert('Limite ultrapassado, chamar o supervisor para liberar o limite!')
+                    
+                    @ 22,05 say 'LIberar Limite' picture '@!'
+                    @ 23,03 say 'Login:'   picture '@!'
+                    @ 23,35 say 'Senha:'   picture '@!'
+
+                    @ 23,10 get cLoginLiberacao picture '@!'    valid !Empty(cLoginLiberacao)
+                    @ 23,42 get cSenhaLiberacao picture '@!'    valid !Empty(cSenhaLiberacao)
+                    read
+                    if LastKey() == 27
+                        nCancelarLiberacao := Alert('Sobre o ultimo pedido?',{'Cancelar', 'Finalizar'})
+                        if nCancelarLiberacao == 1
+                            nLimiteAtualizada += nValorProduto
+                            nValorProdutoTotal -= nValorProduto
+                            loop 
+                        elseif nCancelarLiberacao == 2
+                            exit 
+                        endif
+                    endif 
+
+                    if !(AllTrim(cLoginLiberacao) == cLoginAdmin) .or. !(AllTrim(cSenhaLiberacao) == cSenhaAdmin)
+                        nLimiteAtualizada += nValorProduto
+                        nValorProdutoTotal -= nValorProduto
+                        Alert('Login ou senha incorretas, ultimo cadastro sera excluido')
                         loop 
-                    else
-                        exit 
-                    endif   
+                    endif 
+
+                    @ 22,03 clear to 23,74
                 endif 
 
-                @ 23,02 say 'limite'            picture '@!'
+                @ 23,02 say 'credito'           picture '@!'
                 @ 23,10 say nLimiteAtualizada   picture '@E 99,999.99'  color cCorLimite
                 @ 23,35 say 'valor total'       picture '@!'
                 @ 23,47 say nValorProdutoTotal  picture '@E 99,999.99'
@@ -292,9 +333,142 @@ do while .t.
                 nContLinha++
                 if nContLinha == 22
                     nContLinha := 14
-                    @ nContLinha,02 clear to 22,73 
+                    @ nContLinha,02 clear to 22,74 
                 endif 
             enddo
+            
+            @ 05,01 clear to 24,75
+
+            @ 05,01 say 'Descontos fornecidos no pedido R$ ' + Transform(nDesconto, '@E 999999.99')
+            @ 06,01 say 'Comissao paga no pedido        R$ ' + Transform(nComissao, '@E 999999.99')
+            @ 07,01 say 'Valor total do pedido          R$ ' + Transform(nValorProdutoTotal, '@E 999999.99')
+
+            @ 09,01 to 14,75
+            @ 09,03 say 'formas de pagamento'   picture '@!'
+            @ 09,48 say 'Valor da compra: ' + Transform(nValorProdutoTotal, '@E 999999.99')
+            
+            nContPagamentos := 1
+            cTipoPagamento1 := '1 - Dinheiro'
+            cTipoPagamento2 := '2 - Cheque'
+            cTipoPagamento3 := '3 - Cartao de credito'
+            cCadastroPgto   := ''
+            do while nContPagamentos <= 3
+                nOpcaoPagamento := 0
+
+                @ 10,02 say cTipoPagamento1 picture '@!'
+                @ 11,02 say cTipoPagamento2 picture '@!'
+                @ 12,02 say cTipoPagamento3 picture '@!'
+                @ 13,02 say 'Escolha a forma de pagamento:'
+
+                @ 13,31 get nOpcaoPagamento picture '9' valid Str(nOpcaoPagamento) $ '123'
+                read 
+
+                if AllTrim(Str(nOpcaoPagamento)) $ cCadastroPgto
+                    Alert('Forma de pagamento ja cadastrado!')
+                    loop 
+                endif 
+                cCadastroPgto += AllTrim(Str(nOpcaoPagamento))
+                
+                nContPagamentos++
+
+                nCadastrarPagamentos := Alert('Deseja informar mais formas de pagamento?', {'Sim', 'Nao'})
+                if nCadastrarPagamentos == 1
+                    loop 
+                else
+                    exit 
+                endif 
+            enddo
+            
+            cDescricaoPagamento := ''
+            if Len(cCadastroPgto) == 1
+                cDescricaoPagamento := 'pagamento'
+            else
+                cDescricaoPagamento := 'Como sera realizada o pagamento'
+            endif 
+            
+            @ 16,02 say cDescricaoPagamento picture '@!'
+
+            nLinhasPagamento := 17
+            nTotalPagar      := nValorProdutoTotal
+            if '1' $ cCadastroPgto
+                nTroco      := 0
+                nDinheiro   := 0
+                @ nLinhasPagamento,02   say 'dinheiro | R$' picture '@!'
+
+                if Len(cCadastroPgto) == 1
+                    @ nLinhasPagamento,15 get nDinheiro picture '@E 999999.99'  valid !Empty(nDinheiro) .and. nDinheiro >= nValorProdutoTotal
+                    read 
+                    
+                    nTroco := nDinheiro - nTotalPagar
+                    @ nLinhasPagamento,30 say 'Troco' +  + Transform(nTroco, '@E 999999.99')   picture '@!'
+
+                else
+                    @ nLinhasPagamento,15 get nDinheiro picture '@E 999999.99'  valid !Empty(nDinheiro) .and. nDinheiro > 0
+                    read 
+
+                    nTotalPagar -= nDinheiro
+                endif 
+                nLinhasPagamento++
+            endif 
+
+            if '2' $ cCadastroPgto
+                nPgtoCheque := 0
+                nBanco      := 0
+                nAgencia    := 0
+                nCodConta   := 0
+                nNroCheuqe  := 0
+
+                if Len(cCadastroPgto) == 1
+                    @ nLinhasPagamento++,02 say 'cheque | R$ ' + Transform(nTotalPagar, '@E 999999.99')   picture '@!'
+                else 
+                    @ nLinhasPagamento,02   say 'cheque | R$ '   picture '@!'
+
+                    @ nLinhasPagamento++,14 get nPgtoCheque   picture '@E 999999.99'
+                    read 
+                    
+                    nTotalPagar -= nPgtoCheque
+                endif 
+
+                @ nLinhasPagamento++,02 say 'informe os seguintes dados para pagamento'
+                @ nLinhasPagamento,02   say 'Banco:    Agencia:     Cod. Conta:           Nro Cheque:      '
+
+                @ nLinhasPagamento,08 get nBanco     picture '999'        valid !Empty(nBanco)
+                @ nLinhasPagamento,20 get nAgencia   picture '9999'       valid !Empty(nAgencia)
+                @ nLinhasPagamento,36 get nCodConta  picture '9999999999' valid !Empty(nCodConta)
+                @ nLinhasPagamento,58 get nNroCheuqe picture '999999'     valid !Empty(nNroCheuqe)
+                read 
+
+                nLinhasPagamento++
+            endif 
+
+            if '3' $ cCadastroPgto
+                nQtdParcelas := 0
+
+                @ nLinhasPagamento++,02 say 'cartao | R$ ' + Transform(nTotalPagar, '@E 999999.99')   picture '@!'
+                @ nLinhasPagamento,02 say 'Em quantas parcelas sera paga?'
+
+                @ nLinhasPagamento,33 get nQtdParcelas  picture '99'    valid !Empty(nQtdParcelas) .and. nQtdParcelas > 0
+                read 
+
+                nValorParcela := nTotalPagar / nQtdParcelas
+
+                nLinhasPagamento++
+                @ nLinhasPagamento++,02 say 'Nro Parcela |   Valor   | vencimento'
+                
+                nContParela     := 1
+                dDataVencimento := dDataPedido + 30
+                do while nContParela <= nQtdParcelas
+                    @ nLinhasPagamento,07 say nContParela
+                    @ nLinhasPagamento,15 say nValorParcela     picture '@E 999999.99'
+                    @ nLinhasPagamento,28 say dDataVencimento
+
+                    dDataVencimento += 30
+                    nContParela++
+                enddo
+
+            endif 
+
+            Inkey(0)
 
             nOpcaoNovoPedido := Alert('Pedido Finalizado! Deseja solicitar um novo pedido?', {'Solicitar', 'Sair'})
             if nOpcaoNovoPedido == 1
